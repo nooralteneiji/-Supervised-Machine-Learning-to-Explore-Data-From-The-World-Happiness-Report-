@@ -41,69 +41,7 @@ In order to scale our train and test set for `pre2023`, and feed the data into t
 ### **Data splitting:**  Creating train and test set for `pre2023`
 1. k-fold cross validation 
 This is a re-sampling procedure. It has a single parameter called 'k' that refers to the number of groups (or "folds") that `pre2023` will be split into.
-(https://trituenhantao.io/wp-content/uploads/2020/01/k-fold.png)
-
- 
-## Create model  
-For this analysis, we will use a Support Vector Machine Regression. The basic idea behind SVR is to find the best fit line, which is the hyperplane that has the maximum number of points.
-
-**Why?** Was proven to have highest accuracy when compared to other supervised machine learning models according to [Kaur et al., 2019](https://www.mdpi.com/2076-3417/9/8/1613).
-
-The Support Vector Machine methodology used was adapted from [Kaur et al, 2019](https://www.mdpi.com/2076-3417/9/8/1613), [SVM regression tutorial](https://github.com/AmirAli5/Machine-Learning/blob/main/Supervised%20Machine%20Learning/Regression/3.%20Support%20Vector%20Regression/Support%20Vector%20Regression.ipynb), and [SVM classifier tutorial](https://www.youtube.com/watch?v=8A7L0GsBiLQ). 
-
-
-```
-pre2023_model = SVR()
-```
-
-## Cross-Validation and Model Performance Evaluation
-```
-# empty list to store scores for each fold later
-r2_scores = []
-rmse_scores = []
-accuracy_scores = []
-
-# Define the threshold
-threshold = 0.1  # 10% acceptable limit of error (the percentage of the true value that we'll allow as error)
-
-for i in range(kf.get_n_splits()):
-    # retrieve the data for this fold
-    X_train = X_train_list[i]
-    X_test = X_test_list[i]
-    y_train = y_train_list[i]
-    y_test = y_test_list[i]
-
-    # Fit the model and make predictions
-    model.fit(X_train, y_train)
-    y_pred = model.predict(X_test)
-
-    # Calculate and store the performance metrics
-    r2_scores.append(r2_score(y_test, y_pred))
-    rmse_scores.append(np.sqrt(mean_squared_error(y_test, y_pred)))
-
-    # computing accuracy
-    relative_error = np.abs((y_test - y_pred) / y_test) # Compute the relative error
-    correct_predictions = np.sum(relative_error <= threshold) # Count the number of predictions that fall within the threshold
-    accuracy_scores.append(correct_predictions / len(y_test)) # Compute and store the accuracy for this fold
-
-# Print average performance metrics
-print("Average R^2 Score:", np.mean(r2_scores))
-print("Average RMSE:", np.mean(rmse_scores))
-print('Average Accuracy: ', np.mean(accuracy_scores)) # Print average accuracy
-
-```
-
-**What does this for-loop  do?**
-
-1. Performs k-fold cross-validation, where 
-
-k is the number of splits specified when creating the KFold object. Each iteration corresponds to a single fold.
-Data retrieval for each fold: In each iteration, it retrieves the corresponding training and test data (both the features X and the targets y) for the current fold from the pre-stored lists.
-Model fitting and prediction: It then fits the model using the training data for the current fold, and uses the fitted model to make predictions on the test data for the current fold.
-Performance evaluation: It calculates and stores the R-squared and root mean squared error (RMSE) values, which are common metrics for regression tasks. These metrics evaluate the performance of the model on the test data for each fold.
-Accuracy calculation: It also calculates an accuracy score based on a custom-defined threshold of relative error. For each prediction, it calculates the relative error (the absolute difference between the predicted and true values, divided by the true value), counts the number of predictions with a relative error smaller or equal to the threshold, and computes the proportion of these "accurately" predicted samples. This accuracy score for each fold is then stored.
-
-
+!(https://trituenhantao.io/wp-content/uploads/2020/01/k-fold.png)
 
 ## Measuring accuracy 
 
