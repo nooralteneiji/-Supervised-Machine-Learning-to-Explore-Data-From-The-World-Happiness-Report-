@@ -149,7 +149,7 @@ Without tuning:  R^2 = `0.889`, RMSE = `0.372`, Accuracy = `85.1%`
 Aftering tuning: R^2 = `0.892`, RMSE = `0.364`, Accuracy =  `85.1%`
 
 ### Evaluating the `pre2023` model: Compare to actual 2023 scores 
-![predicted2023_vs_actual2023]('https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/predicted2023_vs_actual2023.png')
+![predicted2023_vs_actual2023](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/predicted2023_vs_actual2023.png)image.
 
 
 
