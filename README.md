@@ -7,7 +7,7 @@ Task was to use World Happiness Report data from 2021. For this analysis, we als
 To access the code used to run analysis, refer to [Notebook.ipynb](/Notebook.ipynb)
 
 ## Data cleaning and wrangling 
-The Support Vector Machine methodology used was adapted from [Kaur et al, 2019](https://www.mdpi.com/2076-3417/9/8/1613) and [this tutorial (though intended for building classification models, while ours is a regression)](https://www.youtube.com/watch?v=8A7L0GsBiLQ). 
+
 
 ## Feature engineering 
 
@@ -17,6 +17,8 @@ The Support Vector Machine methodology used was adapted from [Kaur et al, 2019](
 The basic idea behind SVR is to find the best fit line. In SVR, the best fit line is the hyperplane that has the maximum number of points.
 
 **Why did we choose SVM?** Was proven to have highest accuracy when compared to other supervised machine learning models according to [Kaur et al., 2019](https://www.mdpi.com/2076-3417/9/8/1613).
+
+The Support Vector Machine methodology used was adapted from [Kaur et al, 2019](https://www.mdpi.com/2076-3417/9/8/1613) and [this tutorial (though intended for building classification models, while ours is a regression)](https://www.youtube.com/watch?v=8A7L0GsBiLQ). 
 
 ## Measuring accuracy 
 
