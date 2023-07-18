@@ -41,7 +41,7 @@ In order to scale our train and test set for `pre2023`, and feed the data into t
 ### **Data splitting:**  Creating train and test set for `pre2023`
 1. k-fold cross validation 
 This is a re-sampling procedure. It has a single parameter called 'k' that refers to the number of groups (or "folds") that `pre2023` will be split into.
-!(https://trituenhantao.io/wp-content/uploads/2020/01/k-fold.png)
+![Schematic on how k-fold validation works](https://trituenhantao.io/wp-content/uploads/2020/01/k-fold.png)
 
 ## Measuring accuracy 
 
