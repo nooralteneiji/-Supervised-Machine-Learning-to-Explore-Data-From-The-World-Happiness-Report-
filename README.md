@@ -28,18 +28,21 @@ To access the code used to run analysis, refer to [Notebook.ipynb](/Notebook.ipy
 1. Created 2 dataframes; pre-2023 and 2023 data. 
 2. Countries that were not present in the actual 2023 data were removed to ensure fair comparision later between actual and predicted 2023 scores.
 
-## Data splitting 
+## **Data splitting:** `X` and `y` (`pre2023` and `2023`) 
 1. Split the pre-2023 and 2023 data into dependent and independent variables
 
-## Feature engineering 
-### One-hot encoding 
-In our datasets, we have one categorical column; country. We can't just plug it into our SVM as is, because SVM requires numerical input.
+## Feature engineering: One-hot encoding
+**Purpose:** Ensure X is numeric to prep for scaling  
+In order to scale our train and test set for `pre2023`, and feed the data into the SVM, all X variables need to be numeric. In our case `country` is categorical. As consequence, we need to use one-hot encoding to convert country data into a binary. Doing this process before training and splitting the `pre2023` data will not lead to data leakage. This is acceptable as even though for the `pre2023` dataframe  some countries have data for specific years, but not others, the entire dataset has the exact same countries represented in the `2023` data.
 
-Luckily we can use a trick to bypass this issue by using one-Hot encoding.
+**How it works:** One-hot encoding will create a binary column for each category in the feature. The only downside is that the dimensionality of out data will increase since we have 195 countries in the world. 
 
-One-hot encoding will create a binary column for each category in the feature. The only downside is that the dimensionality of out data will increase since we have 195 countries in the world. Even though we could maintain dimensionality by using ordinal encoding, we will not use it as it would assign a value to each country, implying a ranking--which is not true in our case. It would, for an example, cluster country 193, 194, 195 together because it would assume they are similiar.
+**Why not ordinal encoding?** Even though we could maintain dimensionality by using ordinal encoding, we will not use it as it would assign a value to each country, implying a ranking--which is not true in our case. It would, for an example, cluster country 193, 194, 195 together because it would assume they are similiar.
+## **Data splitting:** training and test set for `pre2023` 
 
-This type of feature engineering needs to happen after data splitting into training and test sets to prevent "data leakage". Because performing encoding before the split would use information for the entire dataset, including the test set. 
+## Scaling train and test set for `pre2023`
+After making all X variables numeric, we can create train and test sets from `pre2023`, then we can scale the data. Scaling NEEDS to happen *after* the train and test split, otherwise the transformation will be done in accordance to the entire dataset, whereas we need the scaling to be done in accordance to the training and testing sets seperately. 
+ 
 
 ## Model selection 
 For this analysis, we will use a Support Vector Machine Regression. The basic idea behind SVR is to find the best fit line, which is the hyperplane that has the maximum number of points.
