@@ -5,16 +5,31 @@ Task was to use World Happiness Report data from 2021. For this analysis, we als
 
 ## Variable definitions 
 `country` 
+
 `year`
+
 `GDP`
+
 `socialSupport`
+
 `lifeExpectancy`
+
 `freedom`
+
 `generosity`
+
 `corruption`
 
 # Methodology
-To access the code used to run analysis, refer to [Notebook.ipynb](/Notebook.ipynb)
+To access the code used to run analysis, refer to [Notebook.ipynb](/Notebook.ipynb).
+
+For this analysis, we will use a Support Vector Machine Regression. The basic idea behind SVR is to find the best fit line, which is the hyperplane that has the maximum number of points.
+
+**Why?** Was proven to have highest accuracy when compared to other supervised machine learning models according to [Kaur et al., 2019](https://www.mdpi.com/2076-3417/9/8/1613).
+
+The Support Vector Machine methodology used was adapted from [Kaur et al, 2019](https://www.mdpi.com/2076-3417/9/8/1613), [SVM regression tutorial](https://github.com/AmirAli5/Machine-Learning/blob/main/Supervised%20Machine%20Learning/Regression/3.%20Support%20Vector%20Regression/Support%20Vector%20Regression.ipynb), and [SVM classifier tutorial](https://www.youtube.com/watch?v=8A7L0GsBiLQ). 
+
+References used to write code: [source 1](https://www.youtube.com/watch?v=8A7L0GsBiLQ), [source 2](https://github.com/AmirAli5/Machine-Learning/blob/main/Supervised%20Machine%20Learning/Regression/3.%20Support%20Vector%20Regression/Support%20Vector%20Regression.ipynb), [source 3](https://www.youtube.com/watch?v=8A7L0GsBiLQ)
 
 ## Data cleaning and wrangling 
 
@@ -39,13 +54,95 @@ In order to scale our train and test set for `pre2023`, and feed the data into t
 **Why not ordinal encoding?** Even though we could maintain dimensionality by using ordinal encoding, we will not use it as it would assign a value to each country, implying a ranking--which is not true in our case. It would, for an example, cluster country 193, 194, 195 together because it would assume they are similiar.
 
 ### **Data splitting:**  Creating train and test set for `pre2023`
-1. k-fold cross validation 
-This is a re-sampling procedure. It has a single parameter called 'k' that refers to the number of groups (or "folds") that `pre2023` will be split into.
-![Schematic on how k-fold validation works](https://trituenhantao.io/wp-content/uploads/2020/01/k-fold.png)
+**How will we split the df?**
+We will use the KFold function to generate the indices (AKA the position) to split `pre2023` into the training and testing sets. 
 
-## Measuring accuracy 
+**What is it?**
+This is a re-sampling procedure. It has a single parameter called 'k' that refers to the number of groups (or "folds") that `pre2023` will be split into. In our case, `pre2023` will be split into multiple different training and testing sets
 
-References used to write code: [source 1](https://github.com/AmirAli5/Machine-Learning/blob/main/Supervised%20Machine%20Learning/Regression/3.%20Support%20Vector%20Regression/Support%20Vector%20Regression.ipynb)
+**Why are we splitting `pre2023` into k=10 folds?*** 
+It means it matters less how the data gets divided - every data point gets to be in a test set exactly once, and gets to be in a training set k-1 times.
+
+**How does it work?** 
+When we use the KFold function, a pair of indices is returned where one part of the indices refers to the training set and the other part to the test set. The indices themselves are integer values that correspond to the position of each data point in `pre2023`. 
+
+We will later retrieve these indices to evaluate our model. 
+
+
+### Scaling train and test set for `pre2023`
+After making all X variables numeric, we can create train and test sets from `pre2023`, then we can scale the data. Scaling NEEDS to happen *after* the train and test split, otherwise the transformation will be done in accordance to the entire dataset, whereas we need the scaling to be done in accordance to the training and testing sets seperately. 
+
+The resulting scaled training and testing sets for each fold are then appended to their respective lists.
+
+
+### Creating the `pre2023` model
+Earlier we split `pre2023` into 10 folds. Now we can use these folds to train the model 10 times, each time using a different subset as the testing data and the remaining data as the training data.
+
+![Schematic illustrating how k-fold validation works](https://trituenhantao.io/wp-content/uploads/2020/01/k-fold.png)
+
+**Why do we use k-fold validation?**
+To provide a robust evaluation of the model performance. The average performance over the 10 trials gives us a better estimate of the model's true performance than a single train/test split. This means we can avoid overfitting where the model performs well on training data (learns the outliers/noise), but poorly on unseen data.
+
+**How did we create the model?**
+```
+pre2023_model = SVR()
+```
+1. We use a `for` loop to iterates over all 10 folds we created earlier. 
+2. We retrieve the corresponding training and test data (both the features X and the targets y) for the current fold from the pre-stored lists.
+```
+    # retrieve the data for this fold
+    X_train = X_train_list[i]
+    X_test = X_test_list[i]
+    y_train = y_train_list[i]
+    y_test = y_test_list[i]
+    
+```
+
+3. In each iteration, the model is fitted to the training data in `X_train_list` and `y_train_list` for the current fold.
+```
+    pre2023_model.fit(X_train, y_train) # training 
+```
+
+4. The fitted model is used to make predictions on the test data for the current fold.
+```
+    y_pred = pre2023_model.predict(X_test) # creating prediction
+    
+```
+
+5. We evaluate the model on each of the testing sets in `X_test_list` and `y_test_list` in each fold.
+
+```
+    # Calculate and store the performance metrics
+    r2_scores.append(r2_score(y_test, y_pred))
+    rmse_scores.append(np.sqrt(mean_squared_error(y_test, y_pred)))
+
+    # computing accuracy
+    relative_error = np.abs((y_test - y_pred) / y_test) # Compute the relative error
+    correct_predictions = np.sum(relative_error <= threshold) # Count the number of predictions that fall within the threshold
+    accuracy_scores.append(correct_predictions / len(y_test)) # Compute and store the accuracy for this fold
+
+```
+6. After the loop, we calculate and print the average performance metrics across all folds to evaluate the overall performance of the model.
+
+**How did our model built on `pre2023` perform?**
+ R^2 = `0.889`, RMSE = `0.372`, Accuracy = `85.1%`
+
+Where accuracy is defined as: If the difference between the predicted and actual values falls within this threshold, then the prediction is deemed correct.
+
+These metrics give us a measure of how well your model is expected to perform on unseen data.
+
+### Creating the `pre2023` model: Optimizing parameters 
+Though our model perfromed quite well, let's find the optimal parameters to see if we can improve performance.
+
+
+
+
+
+
+
+
+
+
 
 ## Visualizations
 
