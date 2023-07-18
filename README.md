@@ -150,8 +150,9 @@ Aftering tuning: R^2 = `0.892`, RMSE = `0.364`, Accuracy =  `85.1%`
 
 ### Evaluating the `pre2023` model: Compare to actual 2023 scores 
 ![predicted2023_vs_actual2023](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/predicted2023_vs_actual2023.png)
-
-
+* The points fall along the line of equality. The closer the points are to this line, the more accurate the model's predictions are.
+* There is a tight cluster of points around the line of equality, implying a more precise model.
+* There is no systematic pattern to the points deviating from the line of equality (for example, if points for lower actual values are consistently overpredicted), this could indicate that the model does not have a bias / captures the relationship between the predictors and the outcome variable.
 
 
 
