@@ -150,14 +150,49 @@ Aftering tuning: R^2 = `0.892`, RMSE = `0.364`, Accuracy =  `85.1%`
 
 ### Evaluating the `pre2023` model: Compare to actual 2023 scores 
 ![predicted2023_vs_actual2023](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/predicted2023_vs_actual2023.png)
-* The points fall along the line of equality. The closer the points are to this line, the more accurate the model's predictions are.
-* There is a tight cluster of points around the line of equality, implying a more precise model.
+* The points fall along and cluster arounf the line of equality = precision.
 * There is no systematic pattern to the points deviating from the line of equality (for example, if points for lower actual values are consistently overpredicted), this could indicate that the model does not have a bias / captures the relationship between the predictors and the outcome variable.
+![residuals](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/residuals.png)
+
+![dist residuals](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/Distributionresiduals.png)
+
+### Final thoughts on 2023 model 
+Since our model performed so well, it is reasonable to try an use to forecast the upcoming year.
+
+
+
+## **Q2:** Can we accurately predict next year's (2023) happiness?
+
+Where as in the 2023 model, the training and test dataset did not include 2023 data. In this model, 2023 data is included too.
+
+
+A. Prepare to train model on `2023` (data from 2005-2023)
+1. Data splitting: X and y (`2023`)
+2. Feature engineering: One-hot encoding
+3. Data splitting: Creating train and test set for `2023`
+4. Scaling train and test set for `2023`
+
+B. Create model from `2023`
+
+C. Evaluate 2023 model 
+   R^2 = `0.898`, RMSE = `0.358`, Accuracy =  `86.3%`
+   
+D. Forecast 2024 
+After training our Support Vector Machine model on the data from 2005-2023, we will use this trained model to forecast the 'happiness' score (y) for the year 2024.
+
+
+However, in order to make this prediction, we will first need the predictor variables (X) for the year 2024.
 
 
 
 
-## Visualizations
+### Final thoughts on 2024 model 
+Hard to predict the future! The predictions are essentially a replication of 2023's data with some minor alterations due to the model. They don't account for potential new information or significant changes that may occur in 2024.
+
+We won't be able to validate these predictions against actual values as we did for the previous years, because the real 2024 data is not available yet.
+
+If there are large year-to-year fluctuations in happiness scores or the predictors, the model might not produce accurate predictions for 2024.
+
 
 # Limitations 
 
