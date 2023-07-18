@@ -34,7 +34,8 @@ References used to write code: [source 1](https://www.youtube.com/watch?v=8A7L0G
 ## Data cleaning and wrangling 
 
 ## **Q1:** Can we accurately predict this year's (2023) happiness?
-**PART A:** Trained and tested our model on data between 2008-2022 to create a prediction for the happiness score for each country in the year 2023. 
+**PART A:** Trained and tested our model on data between 2008-2022 to create a prediction for the happiness score for each country in the year 2023.
+
 **PART B:** Compared predicted 2023 happiness to actual 2023 data.
 
 
@@ -134,10 +135,21 @@ These metrics give us a measure of how well your model is expected to perform on
 ### Creating the `pre2023` model: Optimizing parameters 
 Though our model perfromed quite well, let's find the optimal parameters to see if we can improve performance.
 
+Since we have more than one parameter to optimize, we used the GridSearchCV() to test all possible combinations.
 
+It turns out this is our ideal SVM regression model:
+```
+model = SVR(kernel='rbf', C = 100, epsilon = 0.1, gamma = 'auto')
+```
+**Result**
+The SVM preformed really well straight out of the box, with only slight improvements being added to the R^2 and RSME after optimization, but no changce in accuracy.
 
+Without tuning:  R^2 = `0.889`, RMSE = `0.372`, Accuracy = `85.1%`
 
+Aftering tuning: R^2 = `0.892`, RMSE = `0.364`, Accuracy =  `85.1%`
 
+### Evaluating the `pre2023` model: Compare to actual 2023 scores 
+![predicted2023_vs_actual2023]('Pipeline Outputs/Figures/predicted2023_vs_actual2023.png')
 
 
 
