@@ -3,22 +3,41 @@
 # Dataset
 Task was to use World Happiness Report data from 2021. For this analysis, we also supplemented with happiness data from 2008-2023.
 
+## Variable definitions 
+`country` 
+`year`
+`GDP`
+`socialSupport`
+`lifeExpectancy`
+`freedom`
+`generosity`
+`corruption`
+
 # Methodology
 To access the code used to run analysis, refer to [Notebook.ipynb](/Notebook.ipynb)
 
 ## Data cleaning and wrangling 
 
+## **Q1:** Can we accurately predict this year's (2023) happiness?
+**PART A:** Trained and tested our model on data between 2008-2022 to create a prediction for the happiness score for each country in the year 2023. 
+**PART B:** Compared predicted 2023 happiness to actual 2023 data.
+
+
+### Method
+## Data pre-processing
+1. Created 2 dataframes; pre-2023 and 2023 data. 
+2. Countries that were not present in the actual 2023 data were removed to ensure fair comparision later between actual and predicted 2023 scores.
+3. Split the pre-2023 and 2023 data into dependent and independent variables
 
 ## Feature engineering 
 
 
-
 ## Model selection 
-The basic idea behind SVR is to find the best fit line. In SVR, the best fit line is the hyperplane that has the maximum number of points.
+For this analysis, we will use a Support Vector Machine Regression. The basic idea behind SVR is to find the best fit line, which is the hyperplane that has the maximum number of points.
 
-**Why did we choose SVM?** Was proven to have highest accuracy when compared to other supervised machine learning models according to [Kaur et al., 2019](https://www.mdpi.com/2076-3417/9/8/1613).
+**Why?** Was proven to have highest accuracy when compared to other supervised machine learning models according to [Kaur et al., 2019](https://www.mdpi.com/2076-3417/9/8/1613).
 
-The Support Vector Machine methodology used was adapted from [Kaur et al, 2019](https://www.mdpi.com/2076-3417/9/8/1613) and [this tutorial (though intended for building classification models, while ours is a regression)](https://www.youtube.com/watch?v=8A7L0GsBiLQ). 
+The Support Vector Machine methodology used was adapted from [Kaur et al, 2019](https://www.mdpi.com/2076-3417/9/8/1613), [SVM regression tutorial](https://github.com/AmirAli5/Machine-Learning/blob/main/Supervised%20Machine%20Learning/Regression/3.%20Support%20Vector%20Regression/Support%20Vector%20Regression.ipynb), and [SVM classifier tutorial](https://www.youtube.com/watch?v=8A7L0GsBiLQ). 
 
 ## Measuring accuracy 
 
