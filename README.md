@@ -152,6 +152,7 @@ Aftering tuning: R^2 = `0.892`, RMSE = `0.364`, Accuracy =  `85.1%`
 ![predicted2023_vs_actual2023](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/predicted2023_vs_actual2023.png)
 * The points fall along and cluster arounf the line of equality = precision.
 * There is no systematic pattern to the points deviating from the line of equality (for example, if points for lower actual values are consistently overpredicted), this could indicate that the model does not have a bias / captures the relationship between the predictors and the outcome variable.
+
 ![residuals](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/residuals.png)
 
 ![dist residuals](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/Distributionresiduals.png)
@@ -166,24 +167,61 @@ Since our model performed so well, it is reasonable to try an use to forecast th
 Where as in the 2023 model, the training and test dataset did not include 2023 data. In this model, 2023 data is included too.
 
 
-A. Prepare to train model on `2023` (data from 2005-2023)
+**A. Prepare to train model on `2023` (data from 2005-2023)**
 1. Data splitting: X and y (`2023`)
 2. Feature engineering: One-hot encoding
 3. Data splitting: Creating train and test set for `2023`
 4. Scaling train and test set for `2023`
 
-B. Create model from `2023`
+**B. Create model from `2023`**
 
-C. Evaluate 2023 model 
+**C. Evaluate 2023 model** 
    R^2 = `0.898`, RMSE = `0.358`, Accuracy =  `86.3%`
    
-D. Forecast 2024 
+**D. Forecast 2024**
 After training our Support Vector Machine model on the data from 2005-2023, we will use this trained model to forecast the 'happiness' score (y) for the year 2024.
 
+Our forecasting approach is to use 2023 data as the input for predicting 2024 outcome.
 
-However, in order to make this prediction, we will first need the predictor variables (X) for the year 2024.
+A. Prepare X variables for 2024 forecasting of y
+    a. Select 2023 data
+    b. remove the target variable 'happiness'
+    c. one-hot encode the 'country' column
+    d. ensure colums match the training data
+    c. scale the features using the same scaler used on the trainin data.
 
+B. Find confidence intervals 
 
+Since SVMs are not probailistic models, they do not inherently provide a way for us to calculate confidence intervals (unlike e.g., linear regression). However, we can use a rough approach to generate confidence intervals for our model through **bootstrapping**. 
+
+**What does bootstrapping do?**
+Using bootstrapping will allow us to draw samples from the dataset we used to predict 2024 data. It then replaces the taken samples to fit the model again and again, giving us a distribution of the estimates. With this distribution, we can take it's percentiles to create confidence intervals.
+
+**How to interpret Cl in context of SCM**
+In SVMs, these intervals do not necessarily capture the model's uncertainty about its predictions (unlike models that assume a normal distribution e.g., bayesian model), but rather the variability in the predictions that arises when re-fitting the model to different samples of the data.
+
+A 95% confidence interval, in our case, means that if we were to repeat the sampling process many times, we would expect the true value to fall within this interval 95% of the time. However, this interpretation doesn't imply that there's a 95% chance the true value is within the interval; rather, it's a statement about the method's reliability if the process was repeated many times.
+
+**How did we bootstrap?**
+This code block performs prediction on the 2024 data using a Support Vector Regression (SVR) model, trained on bootstrap resampled data from each fold created by K-Fold cross-validation. The steps are simplified as follows:
+
+1. A variable to store the number of bootstrap samples to create is set, and an empty list to hold bootstrap predictions is prepared.
+
+2. A loop over the number of folds is started. For each fold, the respective training and testing data are retrieved.
+
+3. The SVR model is fitted to the training data for each fold.
+
+4. A nested loop is run for the number of bootstrap iterations. In each iteration:
+
+    - A bootstrap sample (a random resampling of the training data with replacement) is created.
+  
+    - A new SVR model is fitted to this bootstrap sample.
+  
+    - The newly trained model is then used to predict the 2024 data, and these predictions are appended to the list of bootstrap predictions.
+
+5. The list of bootstrap predictions is then converted to a numpy array for ease of computation.
+
+6. Finally, lower and upper percentiles (2.5% and 97.5%, respectively, creating a 95% confidence interval) of these bootstrap predictions are calculated. This gives an estimate of the range within which the model's predictions for 2024 lie, with a certain level of confidence.
 
 
 ### Final thoughts on 2024 model 
@@ -194,9 +232,7 @@ We won't be able to validate these predictions against actual values as we did f
 If there are large year-to-year fluctuations in happiness scores or the predictors, the model might not produce accurate predictions for 2024.
 
 
-# Limitations 
-
-# Future directions 
+# Limitations and Future directions 
 * Conduct further regression analyses to understand the contribution of each variable to happiness while keeping others constant. Though we were able to visually see if two variables predicted happiness, for future directions we can construct a linear fixed effects model to get the weight each variable has towards predicting happines. This method will also inform us if there are more than just 2 interacting variables.
 * Add governance-Quality Measures based on Data from the Worldwide Governance Indicators (WGI) Project.
 * Build a Bayesian Network was adapted from [Chaudhary et al., 2020](https://arxiv.org/abs/2007.09181) to build a map of all the variables and see the strength each factor has on the predictor.
