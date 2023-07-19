@@ -168,30 +168,46 @@ Where as in the 2023 model, the training and test dataset did not include 2023 d
 
 
 **A. Prepare to train model on `2023` (data from 2005-2023)**
-1. Data splitting: X and y (`2023`)
-2. Feature engineering: One-hot encoding
-3. Data splitting: Creating train and test set for `2023`
-4. Scaling train and test set for `2023`
-
-**B. Create model from `2023`**
 
 **C. Evaluate 2023 model** 
    R^2 = `0.898`, RMSE = `0.358`, Accuracy =  `86.3%`
    
-**D. Forecast 2024**
+
 After training our Support Vector Machine model on the data from 2005-2023, we will use this trained model to forecast the 'happiness' score (y) for the year 2024.
 
 Our forecasting approach is to use 2023 data as the input for predicting 2024 outcome.
 
-A. Prepare X variables for 2024 forecasting of y
-    a. Select 2023 data
-    b. remove the target variable 'happiness'
-    c. one-hot encode the 'country' column
-    d. ensure colums match the training data
-    c. scale the features using the same scaler used on the trainin data.
+The workflow for this methodology can be divided into the following steps:
 
-B. Find confidence intervals 
+1. Data Preparation: 2008-2023 train/test
+   - Separate the target variable (happiness) from the features by dropping it from the copy of the dataframe.
+   - Encode categorical variables using one-hot encoding.
+   - Scale the training data (`X_2008_2023_encoded`) using the StandardScaler =
 
+3. Data Preparation: X var for predicted 2024
+    - Extract the data for the year 2023 from the original dataframe and drop the target variable.
+    - Encode the categorical variables in the 2024 data using the same encoding as the training data.
+    - Reorder the columns in the 2024 data to match the order in the training data.
+    - Scale the 2024 data using the same scaler object used on the training data.
+
+4. Model Creation and Training:
+   - Create a Support Vector Regression (SVR) model with a radial basis function kernel and specified hyperparameters (C, epsilon, gamma).
+   - Fit the model on the scaled training data.
+
+5. Prediction for 2024:
+   - Make predictions for the year 2024 using the trained model and the scaled 2024 data.
+
+6. Cross-validation:
+   - Prepare empty lists to store the performance metrics (R-squared, RMSE, Accuracy) for each fold.
+   - Create a KFold object with the desired number of folds.
+   - Perform cross-validation by splitting the scaled training data into train and test sets for each fold.
+   - Create a new SVR model for each fold, fit it on the training data, and make predictions on the test data.
+   - Calculate and store the performance metrics (R-squared, RMSE, Accuracy) for each fold.
+
+7. Calculate Average Performance Metrics:
+   - Calculate the average performance metrics (R-squared, RMSE) across all folds.
+
+8. Bootstrap Resampling:
 Since SVMs are not probailistic models, they do not inherently provide a way for us to calculate confidence intervals (unlike e.g., linear regression). However, we can use a rough approach to generate confidence intervals for our model through **bootstrapping**. 
 
 **What does bootstrapping do?**
@@ -203,25 +219,36 @@ In SVMs, these intervals do not necessarily capture the model's uncertainty abou
 A 95% confidence interval, in our case, means that if we were to repeat the sampling process many times, we would expect the true value to fall within this interval 95% of the time. However, this interpretation doesn't imply that there's a 95% chance the true value is within the interval; rather, it's a statement about the method's reliability if the process was repeated many times.
 
 **How did we bootstrap?**
-This code block performs prediction on the 2024 data using a Support Vector Regression (SVR) model, trained on bootstrap resampled data from each fold created by K-Fold cross-validation. The steps are simplified as follows:
+   - Initialize the SVR model.
+   - Specify the number of bootstrap samples to create.
+   - Fit and evaluate the model for each fold using bootstrap resampling:
+     - Create a bootstrap sample by resampling the training data.
+     - Fit a new SVR model on the bootstrap sample.
+     - Predict the 2024 data using the model trained on the bootstrap sample.
+     - Store the predictions from each bootstrap sample locally so that we don't need to run code again, even if kernel reset.
 
-1. A variable to store the number of bootstrap samples to create is set, and an empty list to hold bootstrap predictions is prepared.
+9. Calculate Confidence Intervals:
+   - Calculate the lower and upper percentiles (2.5% and 97.5%) of the predictions obtained from bootstrap resampling.
+   - Save the confidence intervals to a CSV file and a numpy file.
 
-2. A loop over the number of folds is started. For each fold, the respective training and testing data are retrieved.
+10. Visualization:
 
-3. The SVR model is fitted to the training data for each fold.
+![predected vs 2023](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/happiness_forecast.png)
 
-4. A nested loop is run for the number of bootstrap iterations. In each iteration:
+11. Calculate Percent Change:
+    - Create a new DataFrame for 2023 and 2024 happiness values.
+    - Merge the two DataFrames based on the country.
+    - Add a percent change column to calculate the percentage change in happiness from 2023 to 2024.
+    - Sort the DataFrame based on the percent change.
 
-    - A bootstrap sample (a random resampling of the training data with replacement) is created.
-  
-    - A new SVR model is fitted to this bootstrap sample.
-  
-    - The newly trained model is then used to predict the 2024 data, and these predictions are appended to the list of bootstrap predictions.
-
-5. The list of bootstrap predictions is then converted to a numpy array for ease of computation.
-
-6. Finally, lower and upper percentiles (2.5% and 97.5%, respectively, creating a 95% confidence interval) of these bootstrap predictions are calculated. This gives an estimate of the range within which the model's predictions for 2024 lie, with a certain level of confidence.
+12. Visualization of Percentage Change:
+    - Select the top positive percentage changes and the largest negative percentage changes.
+    - Sort the negative percentage change DataFrame from smallest to largest.
+    - Add a "Change" column to indicate positive or negative change.
+    - Concatenate the positive and negative DataFrames.
+    - Plot a bar chart showing the countries with the highest percent changes in happiness from 2023 to 2024.
+   
+![top prcnt change](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/happiness_forecast_percentage_change.png)   
 
 
 ### Final thoughts on 2024 model 
@@ -232,6 +259,34 @@ We won't be able to validate these predictions against actual values as we did f
 If there are large year-to-year fluctuations in happiness scores or the predictors, the model might not produce accurate predictions for 2024.
 
 
+## **Q3:** Which variables are most strongly associated with happiness?
+### Which variables have the largest influence on determining happiness?
+1. Permutation importance is computed for each variable in the dataset.
+2. The average importance across multiple folds is calculated.
+3. The sorted importances are used to create a horizontal bar plot.
+
+![factors](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/factors_predict_happiness.png)
+
+
+### Are there any interacting variables that predict happiness?
+Here is a summary of the workflow without referring to variables:
+
+1. Create pair plots to visualize potential interactions between features.
+
+![pairplots](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/pairplot.png)
+   
+2. Compute the R-squared value for each pair of features to determine their predictive power.
+3. Identify the pairs of features with moderate or above moderate correlation as potential predictors of happiness.
+4. Create interactive and static 3D scatter plots for each pair of features and happiness.
+
+![GDP_Life_Social](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/GDP_Life_Social.png)
+
+![Happiness_predictedBy_Life_gdp](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/Happiness_predictedBy_Life_gdp.png)
+
+![Happiness_predictedBy_gdp_Social](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/Happiness_predictedBy_gdp_Social.png)
+
+![Happiness_predictedBy_life_Social](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/Happiness_predictedBy_life_Social.png)
+   
 # Limitations and Future directions 
 * Conduct further regression analyses to understand the contribution of each variable to happiness while keeping others constant. Though we were able to visually see if two variables predicted happiness, for future directions we can construct a linear fixed effects model to get the weight each variable has towards predicting happines. This method will also inform us if there are more than just 2 interacting variables.
 * Add governance-Quality Measures based on Data from the Worldwide Governance Indicators (WGI) Project.

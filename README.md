@@ -269,9 +269,23 @@ If there are large year-to-year fluctuations in happiness scores or the predicto
 
 
 ### Are there any interacting variables that predict happiness?
+Here is a summary of the workflow without referring to variables:
 
+1. Create pair plots to visualize potential interactions between features.
 
+![pairplots](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/pairplot.png)
    
+2. Compute the R-squared value for each pair of features to determine their predictive power.
+3. Identify the pairs of features with moderate or above moderate correlation as potential predictors of happiness.
+4. Create interactive and static 3D scatter plots for each pair of features and happiness.
+
+![GDP_Life_Social](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/GDP_Life_Social.png)
+
+![Happiness_predictedBy_Life_gdp](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/Happiness_predictedBy_Life_gdp.png)
+
+![Happiness_predictedBy_gdp_Social](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/Happiness_predictedBy_gdp_Social.png)
+
+![Happiness_predictedBy_life_Social](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/Happiness_predictedBy_life_Social.png)
    
 # Limitations and Future directions 
 * Conduct further regression analyses to understand the contribution of each variable to happiness while keeping others constant. Though we were able to visually see if two variables predicted happiness, for future directions we can construct a linear fixed effects model to get the weight each variable has towards predicting happines. This method will also inform us if there are more than just 2 interacting variables.
