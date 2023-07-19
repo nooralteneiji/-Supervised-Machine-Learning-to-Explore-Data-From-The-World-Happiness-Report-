@@ -307,5 +307,3 @@ and maximize life satisfaction in their respective countries.
 
 
 
-In Markdown, you can create boxed slides by utilizing various formatting options available. Here's an example of how you can create boxed slides using Markdown:
-
