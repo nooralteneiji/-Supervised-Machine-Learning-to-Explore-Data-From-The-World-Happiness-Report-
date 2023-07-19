@@ -1,24 +1,16 @@
-# Problem statement 
-
 # Dataset
 Task was to use World Happiness Report data from 2021. For this analysis, we also supplemented with happiness data from 2008-2023.
 
-## Variable definitions 
-`country` 
+Here are brief definitions for each variable from the World Happiness Report:
 
-`year`
-
-`GDP`
-
-`socialSupport`
-
-`lifeExpectancy`
-
-`freedom`
-
-`generosity`
-
-`corruption`
+- `country`: The name of the country for which the happiness data is reported.
+- `year`: The year in which the happiness data is recorded.
+- `GDP`: Gross Domestic Product per capita, which measures the economic output per person in a country.
+- `socialSupport`: The level of social support and the presence of a support network in a person's life.
+- `lifeExpectancy`: The average number of years a person is expected to live in good health, capturing the overall health and well-being of individuals in a country.
+- `freedom`: The degree of political and social freedoms enjoyed by individuals in a country.
+- `generosity`: The measure of generosity, including charitable donations and helping others, in a country.
+- `corruption`: The perceived level of corruption and trustworthiness within the public sector of a country.
 
 # Methodology
 To access the code used to run analysis, refer to [Notebook.ipynb](/Notebook.ipynb).
