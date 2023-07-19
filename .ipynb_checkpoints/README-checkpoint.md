@@ -304,3 +304,73 @@ Here is a summary of the workflow without referring to variables:
 # Conclusion 
 As a consequence, SVM regression might be used to determine the happiness of a country. If happiness can be predicted at an early stage, it is beneficial to stakeholders such that they can take preventative measures
 and maximize life satisfaction in their respective countries.
+
+
+
+In Markdown, you can create boxed slides by utilizing various formatting options available. Here's an example of how you can create boxed slides using Markdown:
+
+```markdown
+# Slide 1
+<div class="slide-box">
+
+**Title:** Introduction
+
+**Content:**
+Begin your presentation with a captivating introduction that grabs the audience's attention.
+
+</div>
+
+# Slide 2
+<div class="slide-box">
+
+**Title: Objective**
+
+**Content:**
+Clearly state the objective of your presentation and explain the goal of your predictive model.
+
+</div>
+
+# Slide 3
+<div class="slide-box">
+
+**Title: Dataset**
+
+**Content:**
+Provide an overview of the dataset used for your analysis and explain the significance of the variables.
+
+</div>
+
+# Slide 4
+<div class="slide-box">
+
+**Title: Methodology**
+
+**Content:**
+Explain the step-by-step methodology used to create your predictive model, highlighting the key techniques employed.
+
+</div>
+
+# Slide 5
+<div class="slide-box">
+
+**Title: Results**
+
+**Content:**
+Present the results of your predictive model, showcasing the accuracy and performance metrics achieved.
+
+</div>
+
+# Slide 6
+<div class="slide-box">
+
+**Title: Conclusion**
+
+**Content:**
+Summarize the main findings of your presentation and emphasize the importance of your predictive model in understanding happiness.
+
+</div>
+```
+
+In the above example, the slides are enclosed within `<div class="slide-box">...</div>` tags to create a boxed appearance. You can customize the style of the box by applying CSS styles to the `.slide-box` class in your HTML or using an external CSS file.
+
+Keep in mind that the exact styling of the box will depend on the rendering platform or tool you are using to present the Markdown slides.
