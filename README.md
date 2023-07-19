@@ -1,3 +1,7 @@
+If a government can predict its citizens' happiness accurately, it can use that information to evaluate the success of its current policies and make adjustments where necessary. 
+
+The objective of this project is to create a predictive model of happiness. By accurately predicting happiness, we can gain insights into the factors that contribute to well-being and inform policymakers about the effectiveness of their policies. Our model aims to provide a valuable tool for understanding and predicting happiness. 
+
 # Dataset
 Task was to use World Happiness Report data from 2021. For this analysis, we also supplemented with happiness data from 2008-2023.
 
@@ -15,7 +19,7 @@ Here are brief definitions for each variable from the World Happiness Report:
 # Methodology
 To access the code used to run analysis, refer to [Notebook.ipynb](/Notebook.ipynb).
 
-For this analysis, we will use a Support Vector Machine Regression. The basic idea behind SVR is to find the best fit line, which is the hyperplane that has the maximum number of points.
+To create our predictive model, we employed a Support Vector Machine Regression (SVR) approach. SVR aims to find the best fit line, or hyperplane, that maximizes the number of data points. 
 
 **Why?** Was proven to have highest accuracy when compared to other supervised machine learning models according to [Kaur et al., 2019](https://www.mdpi.com/2076-3417/9/8/1613).
 
@@ -24,11 +28,20 @@ The Support Vector Machine methodology used was adapted from [Kaur et al, 2019](
 References used to write code: [source 1](https://www.youtube.com/watch?v=8A7L0GsBiLQ), [source 2](https://github.com/AmirAli5/Machine-Learning/blob/main/Supervised%20Machine%20Learning/Regression/3.%20Support%20Vector%20Regression/Support%20Vector%20Regression.ipynb), [source 3](https://www.youtube.com/watch?v=8A7L0GsBiLQ)
 
 ## Data cleaning and wrangling 
+1. Import the raw data from pre-2023 and 2023 datasets.
+2. Remove columns that are not present in both datasets.
+3. Standardize the naming scheme for dimensions across datasets.
+4. Merge the pre-2023 and 2023 datasets into one dataframe.
+5. Check for null or missing values in the dataframe.
+6. Replace zero values with NaN to prepare for interpolation.
+7. Use linear interpolation to estimate and replace missing values.
+
+Overall, the workflow involves importing, cleaning, standardizing, and merging the data, handling missing values through interpolation, and analyzing the coverage of years and missing data for each country.
 
 ## **Q1:** Can we accurately predict this year's (2023) happiness?
-**PART A:** Trained and tested our model on data between 2008-2022 to create a prediction for the happiness score for each country in the year 2023.
-
-**PART B:** Compared predicted 2023 happiness to actual 2023 data.
+1. Trained and tested our model on data between 2008-2022 to create a prediction for the happiness score for each country in 2023.
+2. Compared predicted 2023 happiness to actual 2023 data.
+3. Evaluated the model's performance using metrics such as R-squared, RMSE, and Accuracy.
 
 
 ### Data pre-processing
@@ -158,6 +171,7 @@ Since our model performed so well, it is reasonable to try an use to forecast th
 
 Where as in the 2023 model, the training and test dataset did not include 2023 data. In this model, 2023 data is included too.
 
+We trained our model on data from 2005-2023, including 2023 data. This allowed us to make predictions for 2024 based on the trained model. We assessed the model's performance using metrics such as R-squared, RMSE, and Accuracy.
 
 **A. Prepare to train model on `2023` (data from 2005-2023)**
 
@@ -252,6 +266,7 @@ If there are large year-to-year fluctuations in happiness scores or the predicto
 
 
 ## **Q3:** Which variables are most strongly associated with happiness?
+We explored the variables' importance in predicting happiness using permutation importance. Additionally, we investigated potential interactions between variables to identify which combinations had a significant impact on happiness.
 ### Which variables have the largest influence on determining happiness?
 1. Permutation importance is computed for each variable in the dataset.
 2. The average importance across multiple folds is calculated.
@@ -280,6 +295,8 @@ Here is a summary of the workflow without referring to variables:
 ![Happiness_predictedBy_life_Social](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/Happiness_predictedBy_life_Social.png)
    
 # Limitations and Future directions 
+* reliance on self-reported data
+* the assumption that past trends will continue into the future. 
 * Conduct further regression analyses to understand the contribution of each variable to happiness while keeping others constant. Though we were able to visually see if two variables predicted happiness, for future directions we can construct a linear fixed effects model to get the weight each variable has towards predicting happines. This method will also inform us if there are more than just 2 interacting variables.
 * Add governance-Quality Measures based on Data from the Worldwide Governance Indicators (WGI) Project.
 * Build a Bayesian Network was adapted from [Chaudhary et al., 2020](https://arxiv.org/abs/2007.09181) to build a map of all the variables and see the strength each factor has on the predictor.
