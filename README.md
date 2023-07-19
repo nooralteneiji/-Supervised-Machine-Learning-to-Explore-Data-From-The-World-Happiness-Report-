@@ -225,40 +225,30 @@ A 95% confidence interval, in our case, means that if we were to repeat the samp
      - Create a bootstrap sample by resampling the training data.
      - Fit a new SVR model on the bootstrap sample.
      - Predict the 2024 data using the model trained on the bootstrap sample.
-     - Store the predictions from each bootstrap sample.
+     - Store the predictions from each bootstrap sample locally so that we don't need to run code again, even if kernel reset.
 
 9. Calculate Confidence Intervals:
    - Calculate the lower and upper percentiles (2.5% and 97.5%) of the predictions obtained from bootstrap resampling.
    - Save the confidence intervals to a CSV file and a numpy file.
 
 10. Visualization:
-   - Plot the actual 2023 happiness scores and the forecasted 2024 happiness scores for each country.
-   - Add the confidence intervals to the plot.
-   - Annotate the UAE forecast on the plot.
-   - Save the plot as an image.
 
-11. Outlier Detection:
-    - Check each country to identify those with predicted 2024 data outside the confidence interval.
-    - Print the countries with predictions outside the confidence interval.
+![predected vs 2023](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/happiness_forecast.png)
 
-12. Calculate Percent Change:
+11. Calculate Percent Change:
     - Create a new DataFrame for 2023 and 2024 happiness values.
     - Merge the two DataFrames based on the country.
     - Add a percent change column to calculate the percentage change in happiness from 2023 to 2024.
     - Sort the DataFrame based on the percent change.
 
-13. Visualization of Percentage Change:
+12. Visualization of Percentage Change:
     - Select the top positive percentage changes and the largest negative percentage changes.
     - Sort the negative percentage change DataFrame from smallest to largest.
     - Add a "Change" column to indicate positive or negative change.
     - Concatenate the positive and negative DataFrames.
     - Plot a bar chart showing the countries with the highest percent changes in happiness from 2023 to 2024.
-    - Save the plot as an image.
    
-   
-
-
-
+![top prcnt change](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/happiness_forecast_percentage_change.png)   
 
 
 ### Final thoughts on 2024 model 
@@ -269,6 +259,20 @@ We won't be able to validate these predictions against actual values as we did f
 If there are large year-to-year fluctuations in happiness scores or the predictors, the model might not produce accurate predictions for 2024.
 
 
+## **Q3:** Which variables are most strongly associated with happiness?
+### Which variables have the largest influence on determining happiness?
+1. Permutation importance is computed for each variable in the dataset.
+2. The average importance across multiple folds is calculated.
+3. The sorted importances are used to create a horizontal bar plot.
+
+![factors](https://github.com/nooralteneiji/Supervised-Machine-Learning-on-Data-From-The-World-Happiness-Report/blob/main/Pipeline%20Outputs/Figures/factors_predict_happiness.png)
+
+
+### Are there any interacting variables that predict happiness?
+
+
+   
+   
 # Limitations and Future directions 
 * Conduct further regression analyses to understand the contribution of each variable to happiness while keeping others constant. Though we were able to visually see if two variables predicted happiness, for future directions we can construct a linear fixed effects model to get the weight each variable has towards predicting happines. This method will also inform us if there are more than just 2 interacting variables.
 * Add governance-Quality Measures based on Data from the Worldwide Governance Indicators (WGI) Project.
