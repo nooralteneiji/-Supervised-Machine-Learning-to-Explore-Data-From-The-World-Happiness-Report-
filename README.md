@@ -16,6 +16,8 @@ Here are brief definitions for each variable from the World Happiness Report:
 - `generosity`: The measure of generosity, including charitable donations and helping others, in a country.
 - `corruption`: The perceived level of corruption and trustworthiness within the public sector of a country.
 
+Target = `happiness`
+
 # Methodology
 To access the code used to run analysis, refer to [Notebook.ipynb](/Notebook.ipynb).
 
@@ -28,7 +30,7 @@ The Support Vector Machine methodology used was adapted from [Kaur et al, 2019](
 References used to write code: [source 1](https://www.youtube.com/watch?v=8A7L0GsBiLQ), [source 2](https://github.com/AmirAli5/Machine-Learning/blob/main/Supervised%20Machine%20Learning/Regression/3.%20Support%20Vector%20Regression/Support%20Vector%20Regression.ipynb), [source 3](https://www.youtube.com/watch?v=8A7L0GsBiLQ)
 
 ## Data cleaning and wrangling 
-1. Import the raw data from pre-2023 and 2023 datasets.
+1. Import the raw data (2008-2023).
 2. Remove columns that are not present in both datasets.
 3. Standardize the naming scheme for dimensions across datasets.
 4. Merge the pre-2023 and 2023 datasets into one dataframe.
@@ -66,6 +68,8 @@ We will use the KFold function to generate the indices (AKA the position) to spl
 **What is it?**
 This is a re-sampling procedure. It has a single parameter called 'k' that refers to the number of groups (or "folds") that `pre2023` will be split into. In our case, `pre2023` will be split into multiple different training and testing sets
 
+![Schematic illustrating how k-fold validation works](https://trituenhantao.io/wp-content/uploads/2020/01/k-fold.png)
+
 **Why are we splitting `pre2023` into k=10 folds?*** 
 It means it matters less how the data gets divided - every data point gets to be in a test set exactly once, and gets to be in a training set k-1 times.
 
@@ -84,7 +88,6 @@ The resulting scaled training and testing sets for each fold are then appended t
 ### Creating the `pre2023` model
 Earlier we split `pre2023` into 10 folds. Now we can use these folds to train the model 10 times, each time using a different subset as the testing data and the remaining data as the training data.
 
-![Schematic illustrating how k-fold validation works](https://trituenhantao.io/wp-content/uploads/2020/01/k-fold.png)
 
 **Why do we use k-fold validation?**
 To provide a robust evaluation of the model performance. The average performance over the 10 trials gives us a better estimate of the model's true performance than a single train/test split. This means we can avoid overfitting where the model performs well on training data (learns the outliers/noise), but poorly on unseen data.
@@ -167,7 +170,7 @@ Since our model performed so well, it is reasonable to try an use to forecast th
 
 
 
-## **Q2:** Can we accurately predict next year's (2023) happiness?
+## **Q2:** Can we accurately predict next year's (2024) happiness?
 
 Where as in the 2023 model, the training and test dataset did not include 2023 data. In this model, 2023 data is included too.
 
@@ -225,7 +228,6 @@ In SVMs, these intervals do not necessarily capture the model's uncertainty abou
 A 95% confidence interval, in our case, means that if we were to repeat the sampling process many times, we would expect the true value to fall within this interval 95% of the time. However, this interpretation doesn't imply that there's a 95% chance the true value is within the interval; rather, it's a statement about the method's reliability if the process was repeated many times.
 
 **How did we bootstrap?**
-   - Initialize the SVR model.
    - Specify the number of bootstrap samples to create.
    - Fit and evaluate the model for each fold using bootstrap resampling:
      - Create a bootstrap sample by resampling the training data.
